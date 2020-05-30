@@ -1,0 +1,22 @@
+{
+    "name": "karakani/mecha",
+    "description": "php wrapper for MeCab",
+    "type": "library",
+    "license": "MIT License",
+    "autoload": {
+        "psr-4": {
+            "Karakani\\MeCab\\": "src"
+        }
+    },
+    "require": {
+        "php": ">=7.0"
+    },
+    "require-dev": {
+        "phpunit/phpunit": "^7.5"
+    },
+    "scripts": {
+        "test": [
+            "phpunit"
+        ]
+    }
+}
