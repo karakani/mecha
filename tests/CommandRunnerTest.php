@@ -6,9 +6,30 @@ use PHPUnit\Framework\TestCase;
 
 class CommandRunnerTest extends TestCase
 {
+    /**
+     * @var bool
+     */
+    private $useMecabCommand;
+
+    protected function setUp()
+    {
+        exec('command -v mecab', $out, $exitcode);
+
+        $this->useMecabCommand = ($exitcode === 0);
+    }
+
+    protected function createMeCabRunner()
+    {
+        if ($this->useMecabCommand) {
+            return CommandRunner::create(['mecab']);
+        } else {
+            return CommandRunner::createWithExistingProcess(new CallAndResponseMock());
+        }
+    }
+
     public function testSingleSentence()
     {
-        $executor = CommandRunner::create(['mecab']);
+        $executor = $this->createMeCabRunner();
 
         $result = $executor->analyze("すもももももももものうち");
 
@@ -27,7 +48,7 @@ class CommandRunnerTest extends TestCase
 
     public function testMultipleAnalyzeInvocation()
     {
-        $executor = CommandRunner::create(['mecab']);
+        $executor = $this->createMeCabRunner();
 
         $result = $executor->analyze("すもももももももものうち");
 
@@ -55,7 +76,7 @@ class CommandRunnerTest extends TestCase
 
     public function testMultipleSentences()
     {
-        $executor = CommandRunner::create(['mecab']);
+        $executor = $this->createMeCabRunner();
 
         $result = $executor->analyze(implode(PHP_EOL, ["山田太郎", "すもももももももものうち"]));
 

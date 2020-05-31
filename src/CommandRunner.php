@@ -23,6 +23,8 @@ class CommandRunner
     private $process;
     /** @var int */
     private $stdout_timeout_sec = 5;
+    /** @var bool */
+    private $dont_close_process_on_exit = false;
 
     public function __destruct()
     {
@@ -41,6 +43,23 @@ class CommandRunner
     {
         $executor = new self();
         $executor->commands = $command;
+        return $executor;
+    }
+
+    /**
+     * CommandProcess を使用してインスタンスを作成する。
+     *
+     * プロセスを共有して使用する場合に使用する。このメソッドを使用して作成した場合、 close後に
+     * プロセスを停止させない。
+     *
+     * @param CommandProcess $process
+     * @return CommandRunner
+     */
+    static public function createWithExistingProcess(CommandProcess $process): CommandRunner
+    {
+        $executor = new self();
+        $executor->process = $process;
+        $executor->dont_close_process_on_exit = true;
         return $executor;
     }
 
@@ -89,6 +108,8 @@ class CommandRunner
     public function close()
     {
         if ($this->process === null) {
+            return;
+        } else if ($this->dont_close_process_on_exit) {
             return;
         }
 

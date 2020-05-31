@@ -22,6 +22,11 @@ class CommandBuilderTest extends TestCase
             ->setUserDic("user\ndic")
             ->build();
 
+        unlink('path');
+        unlink('rc;file');
+        unlink("user\ndic");
+        rmdir('dic dir');
+
         $this->assertEquals([
             'path',
             '--rcfile=rc;file',

@@ -2,13 +2,15 @@
 
 namespace Karakani\MeCab;
 
+require_once __DIR__ . '/CallAndResponseMock.php';
+
 use PHPUnit\Framework\TestCase;
 
 class TaggerTest extends TestCase
 {
     public function testSumomo()
     {
-        $tagger = Tagger::create();
+        $tagger = Tagger::create(CommandRunner::createWithExistingProcess(new CallAndResponseMock()));
 
         $result = $tagger->parse('すもももももももものうち');
 

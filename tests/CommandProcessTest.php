@@ -2,6 +2,8 @@
 
 namespace Karakani\MeCab;
 
+require_once __DIR__ . '/CallAndResponseMock.php';
+
 use PHPUnit\Framework\TestCase;
 
 class CommandProcessTest extends TestCase
@@ -26,5 +28,7 @@ class CommandProcessTest extends TestCase
         $output = $proc->fgets();
 
         $this->assertEquals($input, $output);
+
+        $proc->close();
     }
 }
