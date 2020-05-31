@@ -6,21 +6,13 @@ use PHPUnit\Framework\TestCase;
 
 class CommandRunnerTest extends TestCase
 {
-    /**
-     * @var bool
-     */
-    private $useMecabCommand;
-
-    protected function setUp()
+    protected function createMeCabRunner()
     {
         exec('command -v mecab', $out, $exitcode);
 
-        $this->useMecabCommand = ($exitcode === 0);
-    }
+        $useMecabCommand = ($exitcode === 0);
 
-    protected function createMeCabRunner()
-    {
-        if ($this->useMecabCommand) {
+        if ($useMecabCommand) {
             return CommandRunner::create(['mecab']);
         } else {
             return CommandRunner::createWithExistingProcess(new CallAndResponseMock());
