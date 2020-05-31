@@ -11,12 +11,10 @@
     "require": {
         "php": ">=7.0"
     },
-    "require-dev": {
-        "phpunit/phpunit": "^7.5"
-    },
     "scripts": {
-        "test": [
-            "phpunit"
+        "test-phpunit-phar": [
+            "if [ ! -f ./phpunit.phar ]; then wget -O ./phpunit.phar https://phar.phpunit.de/phpunit-$(php -r 'echo PHP_VERSION_ID < 70300 ? 7 : 9;').phar ; chmod +x ./phpunit.phar ; fi",
+            "./phpunit.phar"
         ]
     }
 }
