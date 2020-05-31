@@ -21,6 +21,7 @@ jobs:
 
 before_install:
   - wget -O ./phpunit.phar https://phar.phpunit.de/phpunit-${PHPUNIT_VERSION}.phar
+  - chmod +x ./phpunit.phar
 
 script:
   - ./phpunit.phar
