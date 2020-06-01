@@ -23,7 +23,7 @@ composer require karakani/mecha-mocha
 ### 基本的な使い方
 
 ```php
-$tagger = \Karakani\MeCab\Tagger::create();
+$tagger = Tagger::create();
 $nodeGroups = $tagger->parse("すもももももももものうち");
 
 foreach ($nodeGroups as $nodeGroup) {
@@ -48,41 +48,41 @@ foreach ($nodeGroups as $nodeGroup) {
 デフォルトのコマンドラインオプションを指定する場合。
 
 ```php
-$command = (new \Karakani\MeCab\CommandBuilder())
+$command = (new CommandBuilder())
     ->setBinPath('/usr/local/bin/mecab')
     ->setUserDic('/usr/local/lib/mecab/dic/mecab-ipadic-neologd')
     ->build();
-$runner = \Karakani\MeCab\CommandRunner::create($command);
+$runner = CommandRunner::create($command);
 
-\Karakani\MeCab\Tagger::setDefaultRunner($runner);
+Tagger::setDefaultRunner($runner);
 
-$tagger = \Karakani\MeCab\Tagger::create();
+$tagger = Tagger::create();
 ```
 
 複数のインスタンスで異なるコマンドラインオプションを使用する場合。
 
 ```php
-$runnerWithDefaultOption = \Karakani\MeCab\CommandRunner::create();
-$taggerA = \Karakani\MeCab\Tagger::create($runnerWithDefaultOption);
+$runnerWithDefaultOption = CommandRunner::create();
+$taggerA = Tagger::create($runnerWithDefaultOption);
 
-$runnerWithCustomOption = \Karakani\MeCab\CommandRunner::create(
-    (new \Karakani\MeCab\CommandBuilder())
+$runnerWithCustomOption = CommandRunner::create(
+    (new CommandBuilder())
         ->setBinPath('/usr/local/bin/mecab')
         ->setUserDic('/usr/local/lib/mecab/dic/mecab-ipadic-neologd')
         ->build()
 );
-$taggerB = \Karakani\MeCab\Tagger::create($runnerWithCustomOption);
+$taggerB = Tagger::create($runnerWithCustomOption);
 ```
 
 コマンドラインの作成に `CommandBuilder` を使用しない場合。
 
 ```php
-$runner = \Karakani\MeCab\CommandRunner::create([
+$runner = CommandRunner::create([
     '/usr/local/bin/mecab',
     '--dicdir=/usr/local/lib/mecab/dic/mecab-ipadic-neologd',
 ]);
 
-\Karakani\MeCab\Tagger::setDefaultRunner($runner);
+Tagger::setDefaultRunner($runner);
 ```
 
 ### mecab プロセスを終了する
@@ -90,7 +90,7 @@ $runner = \Karakani\MeCab\CommandRunner::create([
 バックグラウンドで動作するプロセスを明示的に終了する場合。
 
 ```php
-\Karakani\MeCab\Tagger::getDefaultRunner()->close();
+Tagger::getDefaultRunner()->close();
 ```
 
 但し、通常はスクリプト終了時に自動的に終了するため、必要がない限りこのメソッドを呼び出す必要はありません。
