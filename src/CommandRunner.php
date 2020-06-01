@@ -75,9 +75,11 @@ class CommandRunner
     private function assertProcessAlive()
     {
         if ($this->process === null) {
+            // @codeCoverageIgnoreStart
             throw new Exception(
                 '!!possible bug!! process is not running!',
                 self::EXCEPTION_UNKNOWN);
+            // @codeCoverageIgnoreEnd
         }
 
         $stat = $this->process->getStatus();
@@ -136,14 +138,17 @@ class CommandRunner
 
         // テキストを送信する
         $w = $this->process->fwrite($text . PHP_EOL);
+
         if ($w === false) {
             // 書き込みが失敗する可能性は低い: プロセスが終了している場合には、
             // 上の assertProcessAlive で例外が発生するため
+            // @codeCoverageIgnoreStart
             $this->close();
             throw new Exception(
                 'Failed to write text into mecab process!!',
                 self::EXCEPTION_WRITE_FAILURE
             );
+            // @codeCoverageIgnoreEnd
         }
 
         // 結果を受け取る
@@ -170,6 +175,7 @@ class CommandRunner
             $line = $this->process->fgets();
 
             if ($line === false) {
+                // @codeCoverageIgnoreStart
                 // 通常はこの処理は行われない: もしデータが取得できない場合には stream_select が
                 // 0 を返し、タイムアウト扱いとなるため
                 $this->close();;
@@ -177,6 +183,7 @@ class CommandRunner
                     'Failed to read output from mecab process',
                     self::EXCEPTION_READ_FAILURE
                 );
+                // @codeCoverageIgnoreEnd
             } else if ($line === "EOS\n") { // end of sentence
                 $pendingLines[] = trim($line);
 

@@ -15,4 +15,12 @@ class NodeTest extends TestCase
 
         $this->assertEquals('bar', $node->feature->raw);
     }
+
+    public function testPropertyAccessViolation()
+    {
+        $node = Node::createNodeFromLine("foo\tbar");
+
+        $this->expectException(\Exception::class);
+        $node->noSuchProperty++;
+    }
 }

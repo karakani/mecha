@@ -34,4 +34,40 @@ class CommandBuilderTest extends TestCase
             "--userdic=user\ndic",
         ], $command);
     }
+
+    public function testMissingDicDir()
+    {
+        $this->expectException(\Exception::class);
+        $builder = new CommandBuilder();
+        $builder
+            ->setDicDir('no_such_dir')
+            ->build();
+    }
+
+    public function testMissingRcFile()
+    {
+        $this->expectException(\Exception::class);
+        $builder = new CommandBuilder();
+        $builder
+            ->setRcFile('no_such_file')
+            ->build();
+    }
+
+    public function testMissingUserDicFile()
+    {
+        $this->expectException(\Exception::class);
+        $builder = new CommandBuilder();
+        $builder
+            ->setUserDic('no_such_file')
+            ->build();
+    }
+
+    public function testMissingExecutable()
+    {
+        $this->expectException(\Exception::class);
+        $builder = new CommandBuilder();
+        $builder
+            ->setBinPath('no_such_file')
+            ->build();
+    }
 }

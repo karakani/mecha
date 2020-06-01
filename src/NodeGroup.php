@@ -4,7 +4,7 @@
 namespace Karakani\MeCab;
 
 
-class NodeGroup implements \IteratorAggregate, \Countable
+class NodeGroup implements \IteratorAggregate, \Countable, \ArrayAccess
 {
     protected $nodes = [];
 
@@ -21,5 +21,25 @@ class NodeGroup implements \IteratorAggregate, \Countable
     public function count()
     {
         return count($this->nodes);
+    }
+
+    public function offsetExists($offset)
+    {
+        return isset($this->nodes[$offset]);
+    }
+
+    public function offsetGet($offset)
+    {
+        return $this->nodes[$offset] ?: null;
+    }
+
+    public function offsetSet($offset, $value)
+    {
+        throw new \Exception('You cannot update NodeGroup');
+    }
+
+    public function offsetUnset($offset)
+    {
+        throw new \Exception('You cannot update NodeGroup');
     }
 }

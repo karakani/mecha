@@ -60,7 +60,23 @@ class CommandBuilder
 
     public function setBinPath($path): CommandBuilder
     {
+        $truePath = stream_resolve_include_path($path);
+        if ($truePath === false or !is_executable($truePath)) {
+            throw new \Exception('path is not executable: ' . $path);
+        }
+
         $this->binpath = $path;
+        return $this;
+    }
+
+    /**
+     * use STR as the feature for unknown word
+     * @param bool $useUnkFeature
+     * @return $this
+     */
+    public function outputUnknownKeyword($useUnkFeature = true)
+    {
+        $this->unkFeature = $useUnkFeature;
         return $this;
     }
 

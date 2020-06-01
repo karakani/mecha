@@ -47,4 +47,12 @@ class FeatureTest extends TestCase
         $this->assertNull($feature->pos);
         $this->assertEquals($input, $feature->raw);
     }
+
+    public function testPropertyAccessViolation()
+    {
+        $feature = Feature::fromCsv('名詞,一般,*,*,*,*,すもも,スモモ,スモモ,追加1,追加2');
+
+        $this->expectException(\Exception::class);
+        $feature->noSuchProperty++;
+    }
 }
