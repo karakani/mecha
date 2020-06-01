@@ -28,7 +28,7 @@ class Tagger
     {
         $mecab = new self();
 
-        $mecab->runner = $runner ?: self::getDefaultStaticRunner();
+        $mecab->runner = $runner ?: self::getDefaultRunner();
 
         return $mecab;
     }
@@ -36,7 +36,7 @@ class Tagger
     /**
      * @return CommandRunner
      */
-    static private function getDefaultStaticRunner()
+    static public function getDefaultRunner()
     {
         if (!self::$staticRunner) {
             self::$staticRunner = CommandRunner::create((new CommandBuilder())->build());
