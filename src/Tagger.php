@@ -7,28 +7,28 @@ namespace Karakani\MeCab;
 class Tagger
 {
     /** @var CommandRunner */
-    static protected $staticExecutor;
+    static protected $staticRunner;
 
     /** @var CommandRunner */
-    protected $executor;
+    protected $runner;
 
     /**
      * MeCabインスタンスを作成する。
      *
-     * $executor を指定しない場合、単一の mecab プロセスを使用するシングルトンの
-     * CommandExecutor を使用する。コマンドラインオプションを指定して使用する場合には、
-     * setDefaultExecutor() メソッドを使用して CommandExecutor を使用すると良い。
+     * $runner を指定しない場合、単一の mecab プロセスを使用するシングルトンの
+     * CommandRunner を使用する。コマンドラインオプションを指定して使用する場合には、
+     * setDefaultRunner() メソッドを使用して CommandRunner を使用すると良い。
      *
-     * コマンドラインオプションが異なる場合にのみ、このメソッドで $executor を指定すると良い。
+     * コマンドラインオプションが異なる場合にのみ、このメソッドで $runner を指定すると良い。
      *
-     * @param CommandRunner|null $executor
+     * @param CommandRunner|null $runner
      * @return Tagger
      */
-    static public function create(CommandRunner $executor = null)
+    static public function create(CommandRunner $runner = null)
     {
         $mecab = new self();
 
-        $mecab->executor = $executor ?: self::getDefaultStaticExecutor();
+        $mecab->runner = $runner ?: self::getDefaultStaticRunner();
 
         return $mecab;
     }
@@ -36,22 +36,22 @@ class Tagger
     /**
      * @return CommandRunner
      */
-    static private function getDefaultStaticExecutor()
+    static private function getDefaultStaticRunner()
     {
-        if (!self::$staticExecutor) {
-            self::$staticExecutor = CommandRunner::create((new CommandBuilder())->build());
+        if (!self::$staticRunner) {
+            self::$staticRunner = CommandRunner::create((new CommandBuilder())->build());
         }
 
-        return self::$staticExecutor;
+        return self::$staticRunner;
     }
 
     /**
-     * デフォルトで使用される CommandExecutor を設定する
-     * @param CommandRunner $executor
+     * デフォルトで使用される CommandRunner を設定する
+     * @param CommandRunner $runner
      */
-    static public function setDefaultExecutor(CommandRunner $executor)
+    static public function setDefaultRunner(CommandRunner $runner)
     {
-        self::$staticExecutor = $executor;
+        self::$staticRunner = $runner;
     }
 
     /**
@@ -60,7 +60,7 @@ class Tagger
      */
     public function parse(string $text): \Generator
     {
-        $sentences = $this->executor->analyze($text);
+        $sentences = $this->runner->analyze($text);
 
         foreach ($sentences as $sentence) {
             $nodes = [];

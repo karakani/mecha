@@ -41,9 +41,9 @@ class CommandRunner
 
     static public function create(array $command = ['mecab']): CommandRunner
     {
-        $executor = new self();
-        $executor->commands = $command;
-        return $executor;
+        $runnre = new self();
+        $runnre->commands = $command;
+        return $runnre;
     }
 
     /**
@@ -57,10 +57,10 @@ class CommandRunner
      */
     static public function createWithExistingProcess(CommandProcess $process): CommandRunner
     {
-        $executor = new self();
-        $executor->process = $process;
-        $executor->dont_close_process_on_exit = true;
-        return $executor;
+        $runner = new self();
+        $runner->process = $process;
+        $runner->dont_close_process_on_exit = true;
+        return $runner;
     }
 
     private function activateProcess()

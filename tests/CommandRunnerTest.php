@@ -21,9 +21,9 @@ class CommandRunnerTest extends TestCase
 
     public function testSingleSentence()
     {
-        $executor = $this->createMeCabRunner();
+        $runner = $this->createMeCabRunner();
 
-        $result = $executor->analyze("すもももももももものうち");
+        $result = $runner->analyze("すもももももももものうち");
 
         // 分析行が配列として帰っていること
         $this->assertEquals([
@@ -40,9 +40,9 @@ class CommandRunnerTest extends TestCase
 
     public function testMultipleAnalyzeInvocation()
     {
-        $executor = $this->createMeCabRunner();
+        $runner = $this->createMeCabRunner();
 
-        $result = $executor->analyze("すもももももももものうち");
+        $result = $runner->analyze("すもももももももものうち");
 
         // 文の数が1件であること
         $this->assertEquals([
@@ -56,7 +56,7 @@ class CommandRunnerTest extends TestCase
             "EOS",
         ], $result->current());
 
-        $result = $executor->analyze("山田太郎");
+        $result = $runner->analyze("山田太郎");
 
         // 文の数が1件であること/2回目の呼び出しが正常終了すること
         $this->assertEquals([
@@ -68,9 +68,9 @@ class CommandRunnerTest extends TestCase
 
     public function testMultipleSentences()
     {
-        $executor = $this->createMeCabRunner();
+        $runner = $this->createMeCabRunner();
 
-        $result = $executor->analyze(implode(PHP_EOL, ["山田太郎", "すもももももももものうち"]));
+        $result = $runner->analyze(implode(PHP_EOL, ["山田太郎", "すもももももももものうち"]));
 
         $this->assertEquals([
             "山田	名詞,固有名詞,人名,姓,*,*,山田,ヤマダ,ヤマダ",
@@ -94,11 +94,11 @@ class CommandRunnerTest extends TestCase
 
     public function testProcessResponseTimeout()
     {
-        $executor = CommandRunner::create(['sleep', 10]);
-        $executor->setStdoutTimeoutSec(1);
+        $runner = CommandRunner::create(['sleep', 10]);
+        $runner->setStdoutTimeoutSec(1);
 
         $this->expectExceptionCode(CommandRunner::EXCEPTION_PROCESS_TIMEOUT);
-        $result = $executor->analyze("すもももももももものうち");
+        $result = $runner->analyze("すもももももももものうち");
 
         // generatorであるので、処理を動かすために current を呼び出す
         $result->current();
@@ -106,11 +106,11 @@ class CommandRunnerTest extends TestCase
 
     public function testUnexpectedResponse()
     {
-        $executor = CommandRunner::create(['sh', '-c', "echo \"unexpected\nresponse\"; sleep 10"]);
-        $executor->setStdoutTimeoutSec(1);
+        $runner = CommandRunner::create(['sh', '-c', "echo \"unexpected\nresponse\"; sleep 10"]);
+        $runner->setStdoutTimeoutSec(1);
 
         $this->expectExceptionCode(CommandRunner::EXCEPTION_PROCESS_TIMEOUT);
-        $result = $executor->analyze("すもももももももものうち");
+        $result = $runner->analyze("すもももももももものうち");
 
         // generatorであるので、処理を動かすために current を呼び出す
         $result->current();
@@ -118,11 +118,11 @@ class CommandRunnerTest extends TestCase
 
     public function testIncorrectCommand()
     {
-        $executor = CommandRunner::create(['false']);
-        $executor->setStdoutTimeoutSec(1);
+        $runner = CommandRunner::create(['false']);
+        $runner->setStdoutTimeoutSec(1);
 
         $this->expectExceptionCode(CommandRunner::EXCEPTION_COMMAND_INCORRECT);
-        $result = $executor->analyze("すもももももももものうち");
+        $result = $runner->analyze("すもももももももものうち");
 
         // generatorであるので、処理を動かすために current を呼び出す
         $result->current();
@@ -130,11 +130,11 @@ class CommandRunnerTest extends TestCase
 
     public function testFastExit()
     {
-        $executor = CommandRunner::create(['true']);
-        $executor->setStdoutTimeoutSec(1);
+        $runner = CommandRunner::create(['true']);
+        $runner->setStdoutTimeoutSec(1);
 
         $this->expectExceptionCode(CommandRunner::EXCEPTION_COMMAND_TERMINATED);
-        $result = $executor->analyze("すもももももももものうち");
+        $result = $runner->analyze("すもももももももものうち");
 
         // generatorであるので、処理を動かすために current を呼び出す
         $result->current();
