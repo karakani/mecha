@@ -1,4 +1,12 @@
+os:
+  - linux
+dist: xenial
 language: php
+
+sudo: false
+cache:
+  directories:
+    - $HOME/.composer/cache
 
 jobs:
   include:
