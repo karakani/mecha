@@ -17,7 +17,7 @@
             "./phpunit.phar"
         ],
         "ci-coveralls": [
-            "travis_retry php-coveralls --verbose --coverage_clover=build/logs/clover.xml"
+            "php-coveralls --verbose --coverage_clover=build/logs/clover.xml"
         ]
     },
     "require-dev": {

@@ -16,4 +16,4 @@ script:
   - composer test-phpunit-phar
 
 after_success:
-  - composer ci-coveralls
+  - travis_retry composer ci-coveralls
