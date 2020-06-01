@@ -8,6 +8,7 @@
             "Karakani\\MeCab\\": "src"
         }
     },
+    "keywords": ["mecab"],
     "require": {
         "php": ">=7.0"
     },
