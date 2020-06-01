@@ -13,11 +13,11 @@
     },
     "scripts": {
         "test-phpunit-phar": [
-            "if [ ! -f ./phpunit.phar ]; then wget -O ./phpunit.phar https://phar.phpunit.de/phpunit-$(php -r 'echo PHP_VERSION_ID < 70300 ? 6 : 9;').phar ; chmod +x ./phpunit.phar ; fi",
+            "if [ ! -f ./phpunit.phar ]; then wget --quiet -O ./phpunit.phar https://phar.phpunit.de/phpunit-$(php -r 'echo PHP_VERSION_ID < 70300 ? 6 : 9;').phar ; chmod +x ./phpunit.phar ; fi",
             "./phpunit.phar"
         ],
         "ci-coveralls": [
-            "travis_retry php-coveralls -v --coverage_clover=build/logs/clover.xml"
+            "travis_retry php-coveralls --verbose --coverage_clover=build/logs/clover.xml"
         ]
     },
     "require-dev": {
