@@ -3,7 +3,6 @@ os:
 dist: xenial
 language: php
 
-sudo: false
 cache:
   directories:
     - $HOME/.composer/cache
