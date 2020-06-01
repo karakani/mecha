@@ -1,0 +1,103 @@
+<?php
+
+
+namespace Karakani\MeCab;
+
+
+class CommandBuilder
+{
+    const UNK_STR = '未知語(UNKNOWN)';
+    protected $binpath = 'mecab';
+    protected $rcfile = null;
+    protected $dicdir = null;
+    protected $userdic = null;
+    /**
+     * @var bool 未知語の推定を行わない
+     */
+    protected $unkFeature = false;
+
+    /**
+     * use $file as resource file
+     * @param string $file
+     * @return $this
+     */
+    public function setRcFile(string $file): CommandBuilder
+    {
+        if (!file_exists($file))
+            throw new \Exception('rcfile is not exists: ' . $file);
+
+        $this->rcfile = $file;
+        return $this;
+    }
+
+    /**
+     * set $dir as a system dicdir
+     * @param string $dir
+     * @return $this
+     */
+    public function setDicDir(string $dir): CommandBuilder
+    {
+        if (!is_dir($dir))
+            throw new \Exception('dicdir is not exists: ' . $dir);
+
+        $this->dicdir = $dir;
+        return $this;
+    }
+
+    /**
+     * use FILE as a user dictionary
+     * @param string $file
+     * @return $this
+     */
+    public function setUserDic(string $file): CommandBuilder
+    {
+        if (!file_exists($file))
+            throw new \Exception('userdic is not exists: ' . $file);
+
+        $this->userdic = $file;
+        return $this;
+    }
+
+    public function setBinPath($path): CommandBuilder
+    {
+        $truePath = stream_resolve_include_path($path);
+        if ($truePath === false or !is_executable($truePath)) {
+            throw new \Exception('path is not executable: ' . $path);
+        }
+
+        $this->binpath = $path;
+        return $this;
+    }
+
+    /**
+     * use STR as the feature for unknown word
+     * @param bool $useUnkFeature
+     * @return $this
+     */
+    public function outputUnknownKeyword($useUnkFeature = true)
+    {
+        $this->unkFeature = $useUnkFeature;
+        return $this;
+    }
+
+    /**
+     * build safe command
+     * All command and options are escaped, so that you can invoke command safely.
+     * @return string[]
+     */
+    public function build(): array
+    {
+        $command = [$this->binpath];
+
+        if ($this->rcfile)
+            $command[] = sprintf('--rcfile=%s', $this->rcfile);
+        if ($this->dicdir)
+            $command[] = sprintf('--dicdir=%s', $this->dicdir);
+        if ($this->userdic)
+            $command[] = sprintf('--userdic=%s', $this->userdic);
+        if ($this->unkFeature)
+            $command[] = sprintf('--unk-feature=%s', self::UNK_STR);
+
+        return $command;
+    }
+}

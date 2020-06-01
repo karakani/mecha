@@ -1,0 +1,26 @@
+{
+    "name": "karakani/mecha-mocha",
+    "description": "php wrapper for MeCab",
+    "type": "library",
+    "license": "MIT License",
+    "autoload": {
+        "psr-4": {
+            "Karakani\\MeCab\\": "src"
+        }
+    },
+    "require": {
+        "php": ">=7.0"
+    },
+    "scripts": {
+        "test-phpunit-phar": [
+            "if [ ! -f ./phpunit.phar ]; then wget --quiet -O ./phpunit.phar https://phar.phpunit.de/phpunit-$(php -r 'echo PHP_VERSION_ID < 70300 ? 6 : 9;').phar ; chmod +x ./phpunit.phar ; fi",
+            "./phpunit.phar"
+        ],
+        "ci-coveralls": [
+            "php-coveralls --verbose --coverage_clover=build/logs/clover.xml"
+        ]
+    },
+    "require-dev": {
+        "php-coveralls/php-coveralls": "^2.2"
+    }
+}
