@@ -72,14 +72,6 @@ class CommandRunner
         }
     }
 
-    /**
-     * @param CommandProcess $process
-     */
-    public function setActiveProcess(CommandProcess $process)
-    {
-        $this->process = $process;
-    }
-
     private function assertProcessAlive()
     {
         if ($this->process === null) {
