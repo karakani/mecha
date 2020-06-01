@@ -20,6 +20,7 @@ class CommandBuilderTest extends TestCase
             ->setDicDir('dic dir')
             ->setRcFile('rc;file')
             ->setUserDic("user\ndic")
+            ->outputUnknownKeyword()
             ->build();
 
         unlink('path');
@@ -32,6 +33,7 @@ class CommandBuilderTest extends TestCase
             '--rcfile=rc;file',
             '--dicdir=dic dir',
             "--userdic=user\ndic",
+            "--unk-feature=未知語(UNKNOWN)",
         ], $command);
     }
 
