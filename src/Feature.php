@@ -16,7 +16,7 @@ namespace Karakani\MeCab;
  * @property-read string $lexical
  * @property-read string $yomi
  * @property-read string $pronunciation
- * @property-read string $additionalParams
+ * @property-read array|null $additionalParams 追加項目。未設定の場合には null が設定される。
  */
 class Feature
 {
@@ -39,11 +39,12 @@ class Feature
         $feature->raw = $input;
 
         $components = explode(',', $input);
-        if (count($components) < 8)
-            // 既定の件数に見たない場合にはこれ以上処理を行わない
-            return $feature;
 
         $fixed = array_splice($components, 0, 9);
+
+        while (count($fixed) < 9) {
+            $fixed[] = null; // fill unused column with null
+        }
 
         list(
             $feature->pos,
