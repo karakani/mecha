@@ -16,7 +16,7 @@ namespace Karakani\MeCab;
  * @property-read string $lexical
  * @property-read string $yomi
  * @property-read string $pronunciation
- * @property-read string $additionalParams
+ * @property-read array|null $additionalParams 追加項目。未設定の場合には null が設定される。
  */
 class Feature
 {
