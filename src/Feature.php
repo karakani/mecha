@@ -39,9 +39,6 @@ class Feature
         $feature->raw = $input;
 
         $components = explode(',', $input);
-        if (count($components) < 8)
-            // 既定の件数に見たない場合にはこれ以上処理を行わない
-            return $feature;
 
         $fixed = array_splice($components, 0, 9);
 
