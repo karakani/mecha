@@ -42,6 +42,10 @@ class Feature
 
         $fixed = array_splice($components, 0, 9);
 
+        while (count($fixed) < 9) {
+            $fixed[] = null; // fill unused column with null
+        }
+
         list(
             $feature->pos,
             $feature->pos_sub1,
