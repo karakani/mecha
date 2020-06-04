@@ -66,7 +66,7 @@ EOM
      * always response with dummy
      * @return array
      */
-    public function getStatus()
+    public function getStatus(): array
     {
         return [
             'running' => true
