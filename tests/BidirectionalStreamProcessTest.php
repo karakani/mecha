@@ -56,6 +56,6 @@ class BidirectionalStreamProcessTest extends TestCase
 
         $retrieved = $proc->fgets();
 
-        $this->assertEquals($te, $retrieved);
+        $this->assertEquals($text, $retrieved);
     }
 }
