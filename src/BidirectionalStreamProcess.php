@@ -4,7 +4,7 @@
 namespace Karakani\MeCab;
 
 
-class BidirectionalStreamProcess
+class BidirectionalStreamProcess extends StreamProcess
 {
     protected $stdin;
     protected $stdout;
