@@ -15,8 +15,10 @@ class CommandProcess
 
     /** @var resource */
     protected $fp;
-    /** @var resource[] */
-    protected $pipes;
+    /** @var resource */
+    protected $stdout;
+    /** @var resource */
+    protected $stdin;
 
     public function open(array $command)
     {
@@ -24,10 +26,15 @@ class CommandProcess
             return escapeshellarg($str);
         }, $command);
 
+        $pipes = [];
+
         $this->fp = proc_open(implode(' ', $safeCommand), [
             0 => ['pipe', 'r'],
             1 => ['pipe', 'w'],
-        ], $this->pipes);
+        ], $pipes);
+
+        $this->stdout = $pipes[self::STDOUT];
+        $this->stdin = $pipes[self::STDIN];
     }
 
     public function getStatus()
@@ -37,17 +44,17 @@ class CommandProcess
 
     public function fgets()
     {
-        return fgets($this->pipes[self::STDOUT]);
+        return fgets($this->stdout);
     }
 
     public function fwrite($text)
     {
-        return fwrite($this->pipes[self::STDIN], $text);
+        return fwrite($this->stdin, $text);
     }
 
     public function select(int $timeoutSec): int
     {
-        $_r = [$this->pipes[self::STDOUT]];
+        $_r = [$this->stdout];
         $_w = [];
         $_e = [];
         return stream_select($_r, $_w, $_e, $timeoutSec);
@@ -60,8 +67,8 @@ class CommandProcess
 
         proc_terminate($this->fp);
 
-        fclose($this->pipes[0]);
-        fclose($this->pipes[1]);
+        fclose($this->stdout);
+        fclose($this->stdin);
         proc_close($this->fp);
 
         $this->pipes = null;
