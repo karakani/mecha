@@ -6,6 +6,9 @@ namespace Karakani\MeCab;
 
 class BidirectionalStreamProcess
 {
+    protected $stdin;
+    protected $stdout;
+
     public function __construct($bidi)
     {
         $this->stdin = $bidi;
