@@ -19,7 +19,7 @@ class CommandRunner
 
     /** @var string[] */
     private $commands = null;
-    /** @var CommandProcess */
+    /** @var StreamProcess */
     private $process;
     /** @var int */
     private $stdout_timeout_sec = 5;
@@ -41,21 +41,21 @@ class CommandRunner
 
     static public function create(array $command = ['mecab']): CommandRunner
     {
-        $runnre = new self();
-        $runnre->commands = $command;
-        return $runnre;
+        $runner = new self();
+        $runner->commands = $command;
+        return $runner;
     }
 
     /**
-     * CommandProcess を使用してインスタンスを作成する。
+     * StreamProcess を使用してインスタンスを作成する。
      *
      * プロセスを共有して使用する場合に使用する。このメソッドを使用して作成した場合、 close後に
      * プロセスを停止させない。
      *
-     * @param CommandProcess $process
+     * @param StreamProcess $process
      * @return CommandRunner
      */
-    static public function createWithExistingProcess(CommandProcess $process): CommandRunner
+    static public function createWithExistingProcess(StreamProcess $process): CommandRunner
     {
         $runner = new self();
         $runner->process = $process;
@@ -63,9 +63,15 @@ class CommandRunner
         return $runner;
     }
 
+    /**
+     * @throws Exception コマンドを使用したプロセスの初期化が行えない場合
+     */
     private function activateProcess()
     {
         if ($this->process === null) {
+            if (empty($this->commands))
+                throw new Exception('command to initialize is not found.'); // コマンドが未定義の場合には処理を行わない
+
             // mecab は標準エラー出力を行わない (標準出力にエラーを出力する)
             $this->process = new CommandProcess();
             $this->process->open($this->commands);

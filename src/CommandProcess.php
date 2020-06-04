@@ -8,17 +8,13 @@ namespace Karakani\MeCab;
  * proc_* wrapper
  * @package Karakani\MeCab
  */
-class CommandProcess
+class CommandProcess extends StreamProcess
 {
     const STDIN = 0;
     const STDOUT = 1;
 
     /** @var resource */
     protected $fp;
-    /** @var resource */
-    protected $stdout;
-    /** @var resource */
-    protected $stdin;
 
     public function open(array $command)
     {
@@ -37,27 +33,9 @@ class CommandProcess
         $this->stdin = $pipes[self::STDIN];
     }
 
-    public function getStatus()
+    public function getStatus(): array
     {
         return proc_get_status($this->fp);
-    }
-
-    public function fgets()
-    {
-        return fgets($this->stdout);
-    }
-
-    public function fwrite($text)
-    {
-        return fwrite($this->stdin, $text);
-    }
-
-    public function select(int $timeoutSec): int
-    {
-        $_r = [$this->stdout];
-        $_w = [];
-        $_e = [];
-        return stream_select($_r, $_w, $_e, $timeoutSec);
     }
 
     public function close()
