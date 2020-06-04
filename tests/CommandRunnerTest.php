@@ -139,4 +139,15 @@ class CommandRunnerTest extends TestCase
         // generatorであるので、処理を動かすために current を呼び出す
         $result->current();
     }
+
+    public function testInsufficientInitialization()
+    {
+        $runner = new CommandRunner();
+
+        $this->expectExceptionCode(CommandRunner::EXCEPTION_INITIALIZE_ERROR);
+        $result = $runner->analyze("すもももももももものうち");
+
+        // generatorであるので、処理を動かすために current を呼び出す
+        $result->current();
+    }
 }

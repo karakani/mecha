@@ -11,6 +11,7 @@ class CommandRunner
     const EXCEPTION_PROCESS_TIMEOUT = 10001;
     const EXCEPTION_COMMAND_TERMINATED = 10003;
     const EXCEPTION_COMMAND_INCORRECT = 10005;
+    const EXCEPTION_INITIALIZE_ERROR = 10901;
 
     // テスト不能な例外
     const EXCEPTION_READ_FAILURE = 10002;
@@ -70,7 +71,10 @@ class CommandRunner
     {
         if ($this->process === null) {
             if (empty($this->commands))
-                throw new Exception('command to initialize is not found.'); // コマンドが未定義の場合には処理を行わない
+                throw new Exception(
+                    'command to initialize is not found.',
+                    self::EXCEPTION_INITIALIZE_ERROR
+                ); // コマンドが未定義の場合には処理を行わない
 
             // mecab は標準エラー出力を行わない (標準出力にエラーを出力する)
             $this->process = new CommandProcess();
