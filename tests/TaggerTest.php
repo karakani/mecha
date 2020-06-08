@@ -23,7 +23,7 @@ class TaggerTest extends TestCase
         $this->assertEquals(1, $count);
 
         $this->assertCount(7, $sentences[0]);
-        $this->assertEquals(false,  $sentences[0][0]->isUnknown);
+        $this->assertEquals(false, $sentences[0][0]->isUnknown);
     }
 
     public function testUnknownKeyword()
@@ -49,8 +49,29 @@ class TaggerTest extends TestCase
         $this->assertEquals(1, $count);
         $this->assertCount(6, $sentences[0]);
 
-        $this->assertEquals('タキファソ',  $sentences[0][2]->surface);
-        $this->assertEquals(true,  $sentences[0][2]->isUnknown);
+        $this->assertEquals('タキファソ', $sentences[0][2]->surface);
+        $this->assertEquals(true, $sentences[0][2]->isUnknown);
 
+    }
+
+    public function testMultipleSentence()
+    {
+        $tagger = Tagger::create(CommandRunner::createWithExistingProcess(new CallAndResponseMock()));
+
+        $result = $tagger->parse(implode(PHP_EOL, [
+            'すもももももももものうち',
+            '思い出のタキファソを探して',
+            ]));
+
+        $count = 0;
+        $sentences = [];
+        foreach ($result as $item) {
+            $count++;
+            $sentences[] = $item;
+        }
+        $this->assertEquals(2, $count);
+
+        $this->assertCount(7, $sentences[0], 'first sentence has 7 nodes');
+        $this->assertCount(6, $sentences[1], 'second sentence has 6 nodes');
     }
 }
